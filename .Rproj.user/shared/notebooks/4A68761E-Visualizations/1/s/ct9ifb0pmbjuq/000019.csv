@@ -1,0 +1,7 @@
+"0","library(ggplot2)"
+"0","library(ggmosaic)"
+"0","newTitanic = titanic"
+"0","ggplot(newTitanic) +"
+"0","  geom_mosaic(aes(x= product(Class,Survived), fill = Class)) +"
+"0","  ggtitle(""Survivors of the Titanic Split by Class"") +"
+"0","  guides(fill=""none"")"

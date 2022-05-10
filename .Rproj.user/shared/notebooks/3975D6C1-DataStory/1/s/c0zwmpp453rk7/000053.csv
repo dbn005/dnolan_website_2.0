@@ -1,0 +1,8 @@
+"0","library(fmsb)"
+"0","era.sort = order(era, decreasing = FALSE)"
+"0","topfive = era.sort[1:5]"
+"0","data.spin = data.frame(Four_Seam_Spin_Rate = X4seam_spin[topfive], Slider_Spin_Rate = sl_spin[topfive], Changeup_Spin_Rate = ch_spin[topfive], Curve_Spin_Rate = curve_spin[topfive], Sinker_Spin_Rate = sinker_spin[topfive], Cutter_Spin_Rate= cutter_spin[topfive])"
+"0","row.names(data.spin) = (c(""deGrom"", ""Clase"", ""Suarez"", ""Chafin"", ""Kittredge""))"
+"0","radarchart(data.spin[""deGrom"", ], maxmin = FALSE)"
+"2","Error in if (xxleft > xxright) { : missing value where TRUE/FALSE needed
+"

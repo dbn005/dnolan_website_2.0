@@ -1,0 +1,306 @@
+---
+title: "Examining the Statistics of MLB Pitchers in 2021"
+description: |
+  The purpose of these visualizations is to, through quantitative measurements, judge the pitching arsenal and overall performance of pitchers in the 2021 Major League Baseball season.  Using data gathered from https://atmlb.com/3y4wYXS, the graphs below seek to examine the relationships between certain types of statistics such as ERA, pitch spin rate, and strikeout percentage.  After looking at these visualizations, we want to be able to discover which variables lead to success on the mound.
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+First, let's examine the relationship between strikeout (K) rate and earned run average (ERA).  Does a high K% lead to a low ERA?  Does striking batters out equal overall success?  One would guess that the more batters a pitcher strikes out, the more effective he will be.  
+
+```{r}
+library(ggplot2)
+library(plotly)
+data = read.csv("dataset.csv", header = TRUE, sep = ",")
+attach(data)
+
+p = ggplot(data, aes(x = k_percent, y = era, text = paste(first_name, ï..last_name))) +
+  geom_point() +
+  labs(x = "Strikeout Percentage", y = "ERA", title = "ERA vs. Strikeout Rate") +
+  theme(plot.background = element_rect(fill = "#ffeabd"))
+ggplotly(p)
+#how can i clean this up?
+
+```
+
+The correlation coefficient between strikeout rate and ERA is -0.521, meaning that there is a moderate negative linear correlation between the two variables. In other words, there is some truth to the statement that pitchers who strike out more batters are more likely to have lower ERAs, and thus experience more success.  However, there are some pitchers who thrive despite having low strikeout rates, such as Jose Alvarez, Tyler Rogers and Adam Cimber.
+
+
+_____________________________________________________________________________________________________________________________________________________________________________________
+
+```{r}
+X.4seam.cat = cut(X.4seam, breaks = c(quantile(X.4seam, 0, na.rm = TRUE), quantile(X.4seam, 1/3, na.rm = TRUE), quantile(X.4seam, 2/3, na.rm = TRUE), 
+quantile(X.4seam, 1, na.rm = TRUE)), labels = c("low", "medium", "high"), include.lowest = TRUE, ordered_result = TRUE)
+#table(X.4seam.cat)
+#Splitting up 4-seam fastball percentage into low, medium, and high usage.
+X.slider.cat = cut(X.slider, breaks = c(quantile(X.slider, 0, na.rm = TRUE), quantile(X.slider, 1/3, na.rm = TRUE), quantile(X.slider, 2/3, na.rm = TRUE), 
+quantile(X.slider, 1, na.rm = TRUE)), labels = c("low", "medium", "high"), include.lowest = TRUE)
+#table(X.slider.cat)
+#Splitting up slider percentage into low, medium, and high usage.
+X.changeup.cat = cut(X.changeup, breaks = c(quantile(X.changeup, 0, na.rm = TRUE), quantile(X.changeup, 1/3, na.rm = TRUE), quantile(X.changeup, 2/3, na.rm = TRUE), 
+quantile(X.changeup, 1, na.rm = TRUE)), labels = c("low", "medium", "high"), include.lowest = TRUE)
+#table(X.changeup.cat)
+#Splitting up changeup percentage into low, medium, and high usage.
+X.curve.cat = cut(X.curve, breaks = c(quantile(X.curve, 0, na.rm = TRUE), quantile(X.curve, 1/3, na.rm = TRUE), quantile(X.curve, 2/3, na.rm = TRUE), 
+quantile(X.curve, 1, na.rm = TRUE)), labels = c("low", "medium", "high"), include.lowest = TRUE)
+# table(X.curve.cat)
+#Splitting up 4-seam fastball percentage into low, medium, and high usage.
+data$X.4seam.cat = X.4seam.cat
+data.sub = data[,c("X.4seam.cat", "X4seam_speed")]
+data.sub = data.sub[complete.cases(data.sub),]
+```
+
+This next graph aims to see if pitchers with faster fastballs throw them more often.  Generally, one would think that if a pitcher throws a faster 4-seamer, he would be inclined to throw it more.  The violin boxplot below examines that relationship.  The pitchers that throw fastballs have been split up by percentile into three categories: low fastball frequency, medium frequency, and high frequency. Take a look at the graph below and examine the relationship between the two variables.  
+
+```{r}
+era.cat = cut(era, breaks = c(quantile(era, 0, na.rm = TRUE), quantile(era, 1/3, na.rm = TRUE), quantile(era, 2/3, na.rm = TRUE), 
+quantile(era, 1, na.rm = TRUE)), labels = c("low", "medium", "high"), include.lowest = TRUE, ordered_result = TRUE)
+library("ggside")
+ggplot(data.sub, aes(x = X4seam_speed, y = X.4seam.cat, fill = X.4seam.cat), na.rm=TRUE) +
+  geom_violin(alpha = .5, na.rm = TRUE)+
+  geom_boxplot(width = .5, na.rm = TRUE)+
+  labs(y = "Frequency With Which a Four Seam Fastball is Thrown", x = "Average Four Seam Fastball Speed (mph)", title = "How Often a Fastball is Thrown vs. Average Fastball Speed")+
+  guides(fill = "none")+
+  theme(plot.background = element_rect(fill = "#ffeabd", color = "#ffeabd"))+
+  geom_xsidetile(aes(y = X.4seam.cat), position = "identity")
+```
+
+Somewhat surprisingly, the graph shows little to no relationship between the two variables.  While the medians do slightly trend upwards as frequency is increased, all three violin plots are very similar.  A closer look at some of the outliers reveals some important things to notice.  
+
+First, Cleveland hurler Emmanuel Clase is the only pitcher with an average fastball velocity of over 100 mph.  However, he only threw his fastball .9% of the time.  Why would someone with such a powerful fastball use it so sparingly?  A look at the data set shows that Clase relied heavily on his cutter, a pitch that also topped 100 mph.  He threw the cutter 69.4% of the time.  Because Clase's cutter was so good, he had no reason to throw the fastball.  Thus, he became an outlier in the data set.  
+
+Another interesting outlier is San Francisco Giants reliever Tyler Rogers.  Rogers has the slowest fastball velocity in the data set, yet he threw the pitch with a high frequency.  Confusing, right?  But Rogers is a submarine pitcher, one who's arm nearly scrapes the ground as he delivers his pitch.  Rogers' unorthodox pitching motion allows him to fool hitters and thrive with a very below-average fastball velocity.  
+
+
+_____________________________________________________________________________________________________________________________________________
+
+The following plot will look to track pitchers' sliders.  Typically, an effective slider is based on two things: speed and movement.  A high-velocity slider and one with a lot of movement will be the toughest to hit.  In the hexbin plot below, pitchers' sliders are measured by these two variables.  
+
+```{r}
+library(hexbin)
+h = ggplot(data, aes(x = sl_speed, y = sl_break)) +
+  geom_hex(bins = 15) +
+  labs(x= "Average Slider Speed (mph)", y = "Average Slider Break (in.)", title = "Graphing Pitchers' Average Speed and Break of a Slider")+
+  scale_fill_continuous("Number of Pitchers") +
+  theme(plot.background = element_rect(fill = "#ffeabd"))+
+  theme(legend.background = element_rect(fill = "#ffeabd"))
+h2 = ggplotly(h)
+style(h2, hoverinfo = "x+y+text")
+#how do I get the graph to show the data points when I hover?
+```
+
+As we can see, most pitchers have very similar sliders.  The average pitcher throws his slider at about 85-86 mph with around 5-7 inches of break (movement).  There seems to be some correlation between speed and break.  That is, pitchers with a faster slider tend to have less movement on it.  However, we cannot assume that one causes the other.  
+
+Two specific bins that stand out are the ones in the top left corner.  These bins are so far removed from the rest of the data, and it's fair to wonder what's going on with those pitchers.  The bin farthest away contains the metrics for 41 year-old lefthander Rich Hill.  As he's gotten older, Hill has lost velocity in general, so he's been forced to rely on movement to keep his career alive.  Hill has the only slider clocking in at under 70 mph, but the 22.7 inches of movement he gets on it outdoes the next closest pitcher by over 3 inches.  The next closest pitcher, you ask? None other than everyone's favorite outlier, Tyler Rogers.
+
+Rogers' data is encompassed by that second bin from the left, and it's not surprising to see him there.  We already know that he doesn't throw hard, and, like Hill, needs to rely on movement to get hitters out.  
+
+So what's the point of this hexbin plot? Well, from an offensive perspective, hitters can see what an average slider looks like.  During practice, they can focus on hitting sliders with the average speed and movement.  Conversely, pitchers should focus on moving away from the average, ideally adding speed or movement to their sliders.  
+
+_____________________________________________________________________________________________________________________________________________________________________________________
+
+Next, let's examine the relationship between strikeout percentage and expected weighted on-base average (xwOBA).  According to MLB, "xwOBA is formulated using exit velocity, launch angle and, on certain types of batted balls, Sprint Speed." (https://www.mlb.com/glossary/statcast/expected-woba for more info.) Essentially, it measures how a hitter is expected to be performing strictly based upon factors he can control in order to get the most accurate representation of a hitter's success.  The best pitchers will yield low xwOBAs.  In the scatterplot below, each pitcher's point is colored based upon whether his ERA falls into the lower third of the data, the middle third, or the higher third.  
+
+```{r}
+# first_name[1:10]
+# era_list = sort(era)
+# era_list
+# first_name[era_list[1:10]]
+# first_name[which.max(era_list)]
+
+
+g = ggplot(data, aes(x = k_percent, y = xwoba, fill = era.cat, text = paste(first_name, ï..last_name))) +
+  geom_point() +
+  labs(x = "Strikeout Percentage", y = "xwOBA", title = "xwOBA vs. Strikeout Rate") +
+  scale_fill_discrete("ERA")+
+  theme(plot.background = element_rect(fill = "#ffeabd", color = "#ffeabd")) +
+  theme(legend.background = element_rect(fill = "#ffeabd", color = "#ffeabd"))
+ggplotly(g)
+
+```
+The correlation constant between K% and xwOBA is -0.716, meaning that there is a moderately strong negative linear correlation between the two variables.  Pitchers with higher strikeout rates tend to yield lower xwOBAs.  Because the correlation coefficient is more negative than it was in the first scatterplot, one can conclude that K% affected xwOBA more than ERA in 2021.  
+
+The colors of the data points represent ERA, and because of this, it is easy to see how ERA relates to xwOBA.  Generally, pitchers with a low xwOBA have a low ERA.  Most of the red points lie at the bottom of the plot, and most of the blue points lie at the top.  But what about pitchers like Wily Peralta and Jack Flaherty, who found themselves in the lowest third of ERAs but had higher xwOBAs than some of the "high ERA" players?  The thing about xwOBA is that it is an *expected* value.  Based on the contact they allow hitters to make, Peralta and Flaherty *should have* allowed high wOBAs, and in turn, likely high ERAs.  But since their ERAs were so low, we see that Peralta and Flaherty got lucky in 2021.  For whatever reason, these pitchers' ERAs were better than they should have been.  Maybe the hitters were unlucky and hit baseballs right at the fielders.  Maybe the defense behind Peralta and Flaherty was exceptional.  Likely, Peralta and Flaherty's luck was a combination of many things. But expected values like xwOBA goes to show that ERA doesn't tell the whole story of a pitcher's performance.  
+
+(Side note: Jack Flaherty's luck was likely because of his defense.  His St. Louis Cardinals set a record in 2021 when five different Cardinals won Gold Gloves.  A Gold Glove is an award given to the best fielder at each position.  There is a winner in both the National and American leagues.)
+
+___________________________________________________________________________________________________________________________________________________________________
+
+Below, this side by side barchart below challenges the relationship between whiff rate, the percentage of pitches for which a pitcher generates a swing and miss, and ERA.  Here, whiff rate and ERA are split up by quantiles into three categories, labeled low, medium, and high.
+
+```{r}
+
+whiff.cat = cut(whiff_percent, breaks = c(quantile(whiff_percent, 0, na.rm = TRUE), quantile(whiff_percent, 1/3, na.rm = TRUE), quantile(whiff_percent, 2/3, na.rm = TRUE), 
+quantile(whiff_percent, 1, na.rm = TRUE)), labels = c("low", "medium", "high"), include.lowest = TRUE)
+
+ggplot(data, aes(x = whiff.cat, fill = era.cat)) +
+  geom_bar(position = "dodge") +
+  labs(x = "Whiff Rate", y = "Number of Pitchers", title = "Whiff Rate Sorted by ERA")+
+  scale_fill_discrete("ERA") +
+  theme(plot.background = element_rect(fill = "#ffeabd", color = "#ffeabd"))+
+  theme(legend.background = element_rect(fill = "#ffeabd", color = "#ffeabd"))
+```
+
+The barchart shows an unsurprising relationship: the more swings and misses a pitcher generates, the lower his ERA will be.  This isn't true in all cases, as there are evidently some pitchers who have both a low whiff rate and ERA, and some who have a high whiff rate and ERA.  So clearly, whiff rate isn't everything, but it's a decent indicator of success for a pitcher.
+
+________________________________________________________________________________________________________________________________________________________________________
+
+
+Since our goal through these visualizations is to see what qualities make a good pitcher, we would be missing an important factor if the types of pitches a pitcher throws were not considered.  Below, we will look at a stacked barchart that examines the pitching arsenals of the ten pitchers with the highest whiff rates.  The barchart shows not only what pitches each pitcher threw, but also how frequently he threw them.  
+
+Note: the x-axis decreases by whiff rate (i.e., Jacob deGrom has the highest whiff rate of the ten, Edwin Diaz and Jake Diekman are tied for the lowest of the ten). 
+
+```{r}
+
+pitcher.data = data.frame(Pitcher = rep(c("deGrom", "Iglesias", "Hendriks", "Glasnow", "Scott", "Sewald", "Burnes", "Bieber", "Diekman", "Diaz"), each = 6),
+                          Pitch = rep(c("Four Seam Fastball", "Slider", "Changeup", "Curveball", "Sinker", "Cutter"), times = 10),
+                          Percent = c(57.4, 33.4, 8.9, 0.3, NA, NA, 
+                                      34.8, 30.8, 24.6, NA, 9.7, NA,
+                                      68.9, 21.3, 0.1, 9.7, NA, NA,
+                                      51.6, 32.2, 2.5, 13.7, NA, NA,
+                                      45.4, 51.6, NA, NA, 3.0, NA,
+                                      58.3, 41.6, 0.1, NA, NA, NA,
+                                      1.5, 9.2, 9.6, 18.3, 9.1, 52.3,
+                                      35.3, 25.5, 4.7, 31.2, NA, 3.2,
+                                      56.4, 32.4, 0.7, NA, 10.6, NA,
+                                      61.6, 37.8, NA, NA, 0.6, NA),
+                          Whiff_Rate = rep(c(41.1, 40.9, 38, 37, 36.8, 36.5, 36.5, 36.4, 35.1, 35.1), each =6))
+ggplot(pitcher.data, aes(x = reorder(Pitcher, -Whiff_Rate), y = Percent, fill = Pitch)) +
+  geom_col(position = "fill", stat = "identity") +
+  scale_y_continuous(labels = scales::percent)+
+  theme(axis.text.x = element_text(angle = 45, vjust=.7)) +
+  labs(x = "Pitcher", title = "Pitch Arsenals for the Pitchers with the Ten Highest Whiff Rates")+
+  theme(plot.background = element_rect(fill = "#ffeabd", color = "#ffeabd")) +
+  theme(legend.background = element_rect(fill = "#ffeabd", color = "#ffeabd"))
+  
+```
+
+The barchart shows some fascinating results.  Some pitchers threw five or more pitches, while others were able to get by with essentially two.  Every pitcher threw a four-seam fastball over 25% of the time except for Corbin Burnes, who is perhaps the most interesting one here.  Instead of relying on a fastball like everyone else, Burnes threw a cutter, thrown only by him and Shane Bieber, nearly 50% of the time.  Burnes only threw a fastball a miniscule 1.5% of the time, yet he still had the sixth highest whiff rate in baseball.  Burnes uses six different pitches, while Diaz and Paul Sewald really only throw two. (They throw tertiary pitches less than 1% of the time.)  The fact that Diaz and Sewald can thrive while relying only on a fastball and a slider says a lot about the quality of those pitches.  It seems like Burnes likes to keep his hitters guessing, while Diaz and Sewald are confident that the batter can't hit their pitch, even if they know what's coming.  The takeaway from this chart is pretty clear.  It's important for a pitcher to have two high-caliber pitches to rely on, and typically those are the fastball and the slider.  However, we have seen from Burnes that one can succeed without heavy use of these weapons.  
+
+_________________________________________________________________________________________________________________________________________
+
+To wrap up our analysis of pitchers' arsenals and statistics, we turn to this correlation plot that shows the linear correlation coefficients for relationships between given stats.  Here, we look at ERA, xwOBA, 4-seam fastball frequency, break, spin rate, and velocity, strikeout percent and whiff rate.  On the plot, a dark red box signifies a strong *positive* linear correlation, while a dark blue box signifies a strong *negative* linear correlation.  The lighter the color, the weaker the correlation is.
+
+```{r}
+library("ggcorrplot")
+data.corr = (data[, 5:12])
+data.corr = data.corr[complete.cases(data.corr), ]
+corr = round(cor(data.corr), 1)
+ggcorrplot(corr, hc.order = TRUE, type = "lower", lab = TRUE,
+   ggtheme = ggplot2::theme_gray,
+   colors = c("#6D9EC1", "white", "#E46726")) +
+   guides(fill = "none")+
+   theme(plot.background = element_rect(fill = "#ffeabd", color = "#ffeabd"))+
+   theme(legend.background = element_rect(fill = "#ffeabd", color = "#ffeabd"))+
+   ggtitle("Correlations for Fastball Metrics")
+   
+```
+
+The correlation plot reinforces some things we already knew.  For instance, we saw that from the "xwOBA vs. Strikeout Rate" scatterplot that those two variables had a moderately strong negative correlation.  That can be seen here as well.  But a new fact that we can learn from this plot is that, of the variables measured, xwOBA and K rate have the *strongest* negative linear correlation.  The plot also shows that ERA and xwOBA have a strong positive linear correlation, as do K rate and whiff rate.  Both of these are logical.  Remember, xwOBA is an **expected** value, so as it decreases, we would expect stats like on-base average, slugging percentage, and ERA to decrease as well.  Whiffs lead to strikeouts, so naturally, the more whiffs a pitcher gets, the more strikeouts he will accrue.
+
+It is also interesting how all the correlations measuring fastball stats against other stats are all very weak.  From this, we gather that while a high spin rate, velocity, break, or usgae rate might help a pitcher on the mound, these stats are far from the only ones that impact pitcher performance.  
+
+__________________________________________________________________________________________________________________________________________
+
+**To Summarize**:
+
+The goal through these visualizations was to determine what characteristic make an effective pitcher.  We have seen that there are some common threads between the best of the best.  They are able to generate whiffs and get strikeouts, and maybe they are able to throw a little harder than the rest.  Most rely on a powerful fastball and another strong secondary pitch.  However, a more important takeaway is that effective pitchers come in all shapes and sizes, so to speak.  There might be correlations between success and a certain variable, but it is proven that pitchers can stray from what's normal and still do well.  
+
+We looked at Tyler Rogers, a soft-throwing submarine pitcher who, despite his velocity, had the 13th lowest ERA in baseball.  We saw Milwaukee ace Corbin Burnes's pitching arsenal differ wildly from other pitchers of his caliber.  Guess what? Burnes won the 2021 NL Cy Young award, given to the best pitcher in the National League.  Clearly, there's no right or wrong way to pitch, and even the most unlikely of players can find success.
+
+
+
+
+
+
+```{r}
+# library(fmsb)
+# era.sort = order(era, decreasing = FALSE)
+# topfive = era.sort[1:5]
+# data.spin = data.frame(Four_Seam_Spin_Rate = X4seam_spin[topfive], Slider_Spin_Rate = sl_spin[topfive], Changeup_Spin_Rate = ch_spin[topfive], Curve_Spin_Rate = curve_spin[topfive], Sinker_Spin_Rate = sinker_spin[topfive], Cutter_Spin_Rate= cutter_spin[topfive])
+# row.names(data.spin) = (c("deGrom", "Clase", "Suarez", "Chafin", "Kittredge"))
+# radarchart(data.spin["deGrom", ], maxmin = FALSE)
+```
+
+<!-- # ```{r} -->
+<!-- # library(plotly) -->
+<!-- #  -->
+<!-- # fig <- plot_ly( -->
+<!-- #     type = 'scatterpolar', -->
+<!-- #     fill = 'toself') -->
+<!-- #  -->
+<!-- # fig <- fig %>% -->
+<!-- #   add_trace( -->
+<!-- #     r = c(1932, -->
+<!-- # 2055, -->
+<!-- # 1491, -->
+<!-- # 0, -->
+<!-- # 1843, -->
+<!-- # 0), -->
+<!-- #     theta = c("Four_Seam_Spin_Rate", "Slider_Spin_Rate", "Changeup_Spin_Rate", "Curve_Spin_Rate", "Sinker_Spin_Rate", "Cutter_Spin_Rate"), -->
+<!-- #     name = 'Ranger Suarez', -->
+<!-- #     fill = "toself" -->
+<!-- #   ) -->
+<!-- #  -->
+<!-- # fig <- fig %>% -->
+<!-- #   add_trace( -->
+<!-- #     r = c(2418, 2598, 1618, 2705, 0, 0), -->
+<!-- #     theta = c("Four_Seam_Spin_Rate", "Slider_Spin_Rate", "Changeup_Spin_Rate", "Curve_Spin_Rate", "Sinker_Spin_Rate", "Cutter_Spin_Rate"), -->
+<!-- #     name = 'Jacob deGrom' -->
+<!-- #   ) -->
+<!-- #  -->
+<!-- #  -->
+<!-- #  -->
+<!-- # fig <- fig %>% -->
+<!-- #   add_trace( -->
+<!-- #     r = c(2546, -->
+<!-- # 2550, -->
+<!-- # 0, -->
+<!-- # 0, -->
+<!-- # 0, -->
+<!-- # 2579), -->
+<!-- #     theta = c("Four_Seam_Spin_Rate", "Slider_Spin_Rate", "Changeup_Spin_Rate", "Curve_Spin_Rate", "Sinker_Spin_Rate", "Cutter_Spin_Rate"), -->
+<!-- #     name = 'Emmanuel Clase' -->
+<!-- #     #fill = "toself" -->
+<!-- #   )  -->
+<!-- #  -->
+<!-- # fig <- fig %>% -->
+<!-- #   add_trace( -->
+<!-- #     r = c(2138, 2407, -->
+<!-- # 1798, -->
+<!-- # 0, -->
+<!-- # 2108, -->
+<!-- # 0), -->
+<!-- #     theta = c("Four_Seam_Spin_Rate", "Slider_Spin_Rate", "Changeup_Spin_Rate", "Curve_Spin_Rate", "Sinker_Spin_Rate", "Cutter_Spin_Rate"), -->
+<!-- #     name = 'Andrew Chafin' -->
+<!-- #    # fill = "toself" -->
+<!-- #   ) -->
+<!-- #  -->
+<!-- # fig <- fig %>% -->
+<!-- #   add_trace( -->
+<!-- #     r = c(2552, -->
+<!-- # 2723, -->
+<!-- # 1597, -->
+<!-- # 0, -->
+<!-- # 2383, -->
+<!-- # 0), -->
+<!-- #     theta = c("Four_Seam_Spin_Rate", "Slider_Spin_Rate", "Changeup_Spin_Rate", "Curve_Spin_Rate", "Sinker_Spin_Rate", "Cutter_Spin_Rate"), -->
+<!-- #     name = 'Andrew Kittredge', -->
+<!-- #     fill = "toself" -->
+<!-- #   ) -->
+<!-- #  -->
+<!-- # fig <- fig %>% -->
+<!-- #   layout( -->
+<!-- #     polar = list( -->
+<!-- #       radialaxis = list( -->
+<!-- #         visible = T, -->
+<!-- #         range = c(0,3000) -->
+<!-- #       ) -->
+<!-- #     ) -->
+<!-- #   ) -->
+<!-- #  -->
+<!-- # fig -->
+<!-- # ``` -->
+<!-- #  -->

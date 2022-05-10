@@ -1,0 +1,65 @@
+"0","library(ggplot2)"
+"0","library(plotly)"
+"0","data = read.csv(""dataset.csv"", header = TRUE, sep = "","")"
+"0","attach(data)"
+"2","The following objects are masked from data (pos = 4):
+
+    ch_break, ch_speed, ch_spin, curve_break, curve_speed, curve_spin, cutter_break, cutter_speed, cutter_spin, era,
+    first_name, ï..last_name, innings.pitched, k_percent, sinker_break, sinker_speed, sinker_spin, sl_break,
+    sl_speed, sl_spin, split_break, split_speed, split_spin, whiff_percent, X.4seam, X.changeup, X.curve, X.cutter,
+    X.sinker, X.slider, X.split, X4seam_break, X4seam_speed, X4seam_spin, xwoba, year
+
+"
+"2","The following objects are masked from data (pos = 6):
+
+    ch_break, ch_speed, ch_spin, curve_break, curve_speed, curve_spin, cutter_break, cutter_speed, cutter_spin, era,
+    first_name, ï..last_name, innings.pitched, k_percent, sinker_break, sinker_speed, sinker_spin, sl_break,
+    sl_speed, sl_spin, split_break, split_speed, split_spin, whiff_percent, X.4seam, X.changeup, X.curve, X.cutter,
+    X.sinker, X.slider, X.split, X4seam_break, X4seam_speed, X4seam_spin, xwoba, year
+
+"
+"2","The following objects are masked from data (pos = 8):
+
+    ch_break, ch_speed, ch_spin, curve_break, curve_speed, curve_spin, cutter_break, cutter_speed, cutter_spin, era,
+    first_name, ï..last_name, innings.pitched, k_percent, sinker_break, sinker_speed, sinker_spin, sl_break,
+    sl_speed, sl_spin, split_break, split_speed, split_spin, whiff_percent, X.4seam, X.changeup, X.curve, X.cutter,
+    X.sinker, X.slider, X.split, X4seam_break, X4seam_speed, X4seam_spin, xwoba, year
+
+"
+"2","The following objects are masked from data (pos = 9):
+
+    ch_break, ch_speed, ch_spin, curve_break, curve_speed, curve_spin, cutter_break, cutter_speed, cutter_spin, era,
+    first_name, ï..last_name, innings.pitched, k_percent, sinker_break, sinker_speed, sinker_spin, sl_break,
+    sl_speed, sl_spin, split_break, split_speed, split_spin, whiff_percent, X.4seam, X.changeup, X.curve, X.cutter,
+    X.sinker, X.slider, X.split, X4seam_break, X4seam_speed, X4seam_spin, xwoba, year
+
+"
+"2","The following objects are masked from data (pos = 10):
+
+    ch_break, ch_speed, ch_spin, curve_break, curve_speed, curve_spin, cutter_break, cutter_speed, cutter_spin, era,
+    first_name, ï..last_name, innings.pitched, k_percent, sinker_break, sinker_speed, sinker_spin, sl_break,
+    sl_speed, sl_spin, split_break, split_speed, split_spin, whiff_percent, X.4seam, X.changeup, X.curve, X.cutter,
+    X.sinker, X.slider, X.split, X4seam_break, X4seam_speed, X4seam_spin, xwoba, year
+
+"
+"2","The following objects are masked from data (pos = 11):
+
+    ch_break, ch_speed, ch_spin, curve_break, curve_speed, curve_spin, cutter_break, cutter_speed, cutter_spin, era,
+    first_name, ï..last_name, innings.pitched, k_percent, sinker_break, sinker_speed, sinker_spin, sl_break,
+    sl_speed, sl_spin, split_break, split_speed, split_spin, whiff_percent, X.4seam, X.changeup, X.curve, X.cutter,
+    X.sinker, X.slider, X.split, X4seam_break, X4seam_speed, X4seam_spin, xwoba, year
+
+"
+"2","The following objects are masked from data (pos = 14):
+
+    ch_break, ch_speed, ch_spin, curve_break, curve_speed, curve_spin, cutter_break, cutter_speed, cutter_spin, era,
+    first_name, ï..last_name, innings.pitched, k_percent, sinker_break, sinker_speed, sinker_spin, sl_break,
+    sl_speed, sl_spin, split_break, split_speed, split_spin, whiff_percent, X.4seam, X.changeup, X.curve, X.cutter,
+    X.sinker, X.slider, X.split, X4seam_break, X4seam_speed, X4seam_spin, xwoba, year
+
+"
+"0","p = ggplot(data, aes(x = k_percent, y = era, text = paste(first_name, ï..last_name))) +"
+"0","  geom_point() +"
+"0","  labs(x = ""Strikeout Percentage"", y = ""ERA"", title = ""ERA vs. Strikeout Rate"") +"
+"0","  theme(plot.background = element_rect(fill = ""#ffeabd""))"
+"0","ggplotly(p)"

@@ -1,0 +1,23 @@
+---
+title: "About the Site Creator"
+image: me.jpg
+description: |
+  Some additional details about the website creator
+color1: "#5A59A3"
+color2: "pink"
+angle: 145
+links:
+  - label: Email
+    url: "mailto:dbn005@bucknell.edu"
+output:
+  postcards::onofre
+site: distill::distill_website
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+Website created by Danny Nolan
+
+
+Danny Nolan is a first-year student at Bucknell University from Haddonfield, New Jersey.  He is a statistics major in the College of Arts and Sciences.  The visualizations on this website were made by Nolan in Math 230, Data Visualization and Computing, through RStudio and RMarkdown.  Nolan is a passionate Philadelphia Phillies fan, and his love for baseball has inspired him in creating some of these visualizations.  

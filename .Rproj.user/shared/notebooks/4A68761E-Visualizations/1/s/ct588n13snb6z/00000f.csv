@@ -1,0 +1,8 @@
+"0","library(Lock5Data)"
+"0","data(Cars2020)"
+"0","ggplot(Cars2020, aes(x = Type, y = HwyMPG, fill = Type)) +"
+"0","  geom_violin(scale = ""width"", alpha = .5) +"
+"0","  guides(fill = ""none"") +"
+"0","  geom_boxplot(width = .25) +"
+"0","  labs(y = ""Highway Miles Per Gallon"") +"
+"0","  ggtitle(""Highway MPG vs. Car Type"")"

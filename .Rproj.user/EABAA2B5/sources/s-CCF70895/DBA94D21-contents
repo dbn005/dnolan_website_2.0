@@ -1,0 +1,19 @@
+---
+title: "About this site"
+description: |
+  Some additional details about the website
+color1: "#5A59A3"
+color2: "pink"
+angle: 145
+output:
+  postcards::onofre
+site: distill::distill_website
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+Website created by Danny Nolan
+
+
+Danny Nolan is a first-year student at Bucknell University from Haddonfield, New Jersey.  He is a statistics major in the College of Arts and Sciences.  The visualizations on this website were made by Nolan through RStudio.

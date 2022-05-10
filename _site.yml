@@ -1,0 +1,21 @@
+name: "dnolan_website_2.0"
+title: "Home Page"
+theme: my_theme.css
+description: |
+  My Website 2.0
+output_dir: "docs"
+navbar:
+  logo:
+    image: images/R.png
+  right:
+    - text: "Generative Art"
+      href: GenArt.html
+    - text: "Past Visualizations"
+      href: Visualizations.html
+    - text: "Exploring Baseball Data"
+      href: DataStory.html
+  left:
+    - text: "About"
+      href: about.html
+output: distill::distill_article
+

@@ -1,0 +1,9 @@
+"0","# ggplot(data.frame(which.min(era), aes(x = X.4seam, y = X.slider)) +"
+"0","#   geom_bar(stat=""identity"", width=1) +"
+"0","#   coord_polar(""y"", start=0)"
+"0","  "
+"0","ggplot(data, aes(x = era, y = k_percent, fill = era)) +"
+"0","  geom_bar(stat = ""identity"", width = 1)"
+"2","Warning:"
+"2"," position_stack requires non-overlapping x intervals
+"

@@ -1,0 +1,12 @@
+"0","library(hexbin)"
+"0","h = ggplot(data, aes(x = sl_speed, y = sl_break)) +"
+"0","  geom_hex(bins = 15) +"
+"0","  labs(x= ""Average Slider Speed (mph)"", y = ""Average Slider Break (in.)"", title = ""Graphing Pitchers' Average Speed and Break of a Slider"")+"
+"0","  scale_fill_continuous(""Number of Pitchers"") +"
+"0","  theme(plot.background = element_rect(fill = ""#ffeabd""))+"
+"0","  theme(legend.background = element_rect(fill = ""#ffeabd""))"
+"0","h2 = ggplotly(h)"
+"2","Warning:"
+"2"," Removed 54 rows containing non-finite values (stat_binhex).
+"
+"0","style(h2, hoverinfo = ""x+y+text"")"

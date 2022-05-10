@@ -1,0 +1,26 @@
+---
+title: "Visualizations Using RStudio"
+description: |
+  Welcome!  This website features visualizations and art produced through RStudio. Use the tabs on the right to navigate between different visualizations.  I hope you enjoy them!
+color1: "#5A59A3"
+color2: "orange"
+angle: 145
+output:
+  postcards::onofre
+site: distill::distill_website
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+# Learn more about creating websites with Distill at:
+# https://rstudio.github.io/distill/website.html
+
+```
+```{r}
+# library(postcards)
+# create_article(file = "BigData",
+#                package = "postcards")
+```
+
+  Welcome!  This website features visualizations and art produced through RStudio. Use the tabs on the right to navigate between different visualizations.  I hope you enjoy them!

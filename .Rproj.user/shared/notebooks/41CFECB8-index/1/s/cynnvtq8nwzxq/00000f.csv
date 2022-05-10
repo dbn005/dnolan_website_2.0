@@ -1,0 +1,6 @@
+"0","library(postcards)"
+"0","create_article(file = ""BigData"","
+"0","               package = ""postcards"")"
+"2","Error in create_article(file = ""BigData"", package = ""postcards"") : 
+  could not find function ""create_article""
+"

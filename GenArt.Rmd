@@ -1,0 +1,47 @@
+---
+title: "Generative Art"
+description: |
+  Pieces of Artwork Created Using RStudio and the aRtsy Package.
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+<!-- ```{r} -->
+<!-- library(aRtsy) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- set.seed(9) -->
+<!-- cobweb = canvas_cobweb(colors = "green", "black", lines = 1500, 80) -->
+<!-- saveCanvas(cobweb, filename = "myCobweb.png") -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- library(wesanderson) -->
+<!-- set.seed(1) -->
+<!-- flow = canvas_flow(colors = wes_palette("GrandBudapest1"), background = "skyblue1", lines = 1000, stepmax = .008) -->
+<!-- saveCanvas(flow, filename = "myFlow.png") -->
+<!-- ``` -->
+<!-- # -->
+<!-- ```{r} -->
+<!-- set.seed(3) -->
+<!-- stroke = canvas_strokes(colors = c("#EF5B0C", "#003895"), neighbors = 3, p = .01, side = TRUE, iterations =10) -->
+<!-- saveCanvas(stroke, filename = "myStrokeBucknell.png") -->
+<!-- ``` -->
+
+**Bucknell Gradient**
+
+![](stroke_bucknell.png)
+
+_____________________________________________________________
+**River's Current**
+
+![](flow.png)
+
+__________________
+**The Neon Spider**
+
+![](cobweb.png)
+

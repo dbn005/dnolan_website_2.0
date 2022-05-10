@@ -1,0 +1,12 @@
+"0","library(ggplot2)"
+"0","library(Lock5Data)"
+"0","data(CollegeScores)"
+"0","CollegeScores = CollegeScores[complete.cases(CollegeScores), ]"
+"0","attach(CollegeScores)"
+"0","ggplot(CollegeScores, aes(x = FirstGen, y = CompRate)) + "
+"0","  geom_point(alpha = 1/2, size = 2) +"
+"0","  geom_smooth(method = ""lm"") +"
+"0","  labs(x= ""Percentage of First Generation College Students"", y = ""College Completion Rate"", "
+"0","  title = ""College Completion Rate vs. Percentage of First Generation Students"")"
+"2","`geom_smooth()` using formula 'y ~ x'
+"

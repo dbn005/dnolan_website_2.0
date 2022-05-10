@@ -1,0 +1,56 @@
+---
+title: "Generative Art"
+author: "Danny Nolan"
+date: '2022-04-20'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+---
+title: "Generative Art"
+description: |
+  Pieces of Artwork Created Using RStudio
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+<!-- ```{r} -->
+<!-- library(aRtsy) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- set.seed(9) -->
+<!-- cobweb = canvas_cobweb(colors = "green", "black", lines = 1500, 80) -->
+<!-- saveCanvas(cobweb, filename = "myCobweb.png") -->
+<!-- ``` -->
+
+<!-- # ```{r} -->
+<!-- # library(wesanderson) -->
+<!-- # set.seed(1) -->
+<!-- # flow = canvas_flow(colors = wes_palette("GrandBudapest1"), background = "skyblue1", lines = 1000, stepmax = .008) -->
+<!-- # saveCanvas(flow, filename = "myFlow.png") -->
+<!-- # ``` -->
+<!-- #  -->
+<!-- # ```{r} -->
+<!-- # set.seed(3) -->
+<!-- # stroke = canvas_strokes(colors = c("#EF5B0C", "#003895"), neighbors = 3, p = .01, side = TRUE, iterations =10) -->
+<!-- # saveCanvas(stroke, filename = "myStrokeBucknell.png") -->
+<!-- # ``` -->
+
+
+```{r}
+# library(ggplot)
+# knitr:include_graphics(myCobweb.png)
+```
+![D. Nolan Stroke](myStrokeBucknell.png)
+
+![D. Nolan Flow](myFlow.png)
+
+![D. Nolan Cobweb](cobweb.png)
+
+
